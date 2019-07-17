@@ -60,16 +60,19 @@ function getUsers(){
       .then((pst) => pst.json())
       .then((data) => {
           let postOutput = '<h2 style="color: black" class="mb-4">Posts</h2>';
+          let i = 0;
           data.forEach(function(post) {
+              i += 1;
+            //   console.log("i : " + i);
               postOutput += `
                 <div class="card card-body mb-3">
                     <h4 style="color: green">${post.title}</h4>
                     <p >${post.body}</p>
                     <form action="" class="form-inline">
                         <div class="container">
-                            <button type="button" class="btn btn-outline-dark btn-sm">Like</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm">Comment</button>
-                            <input type="text" style="height: 33px; width: 300px" class="form-control" placeholder="Comment">
+                            <button type="button" id="btnLike${i}" style="" class="btn btn-default btn-sm" onclick="like(this);">Like</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm disabled">Comment</button>
+                            <input type="text" style="height: 32px; width: 850px" class="form-control" disabled placeholder="Write your comment...">
                         </div>
                     </form>
                 </div>
@@ -77,5 +80,22 @@ function getUsers(){
           });
           document.getElementById("output").innerHTML = postOutput;
       })
+  }
+
+  function like(event) {
+      console.log("target " + event.id);
+      var btnLike = document.getElementById(event.id);
+      //btnLike.setAttribute("style","color: blue");
+      if(event.className == "btn btn-default btn-sm"){
+          btnLike.className="btn btn-info btn-sm";
+          btnLike.nextElementSibling.className = "btn btn-outline-dark btn-sm active";
+          btnLike.nextElementSibling.nextElementSibling.removeAttribute("disabled");
+      }else{
+          btnLike.className="btn btn-default btn-sm";
+          btnLike.nextElementSibling.className = "btn btn-outline-dark btn-sm disabled";
+          var att = document.createAttribute("disabled");
+          btnLike.nextElementSibling.nextElementSibling.setAttributeNode(att);
+      }
+      
   }
 
